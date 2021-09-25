@@ -5,32 +5,30 @@ namespace Training\TestOM\Controller\Index;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\PageFactory;
-use Training\TestOM\Model\TestFactory;
+use Training\TestOM\Model\PlayWithTest;
 
 class Index implements ActionInterface
 {
-
+    /**
+     * @var PlayWithTest
+     */
+    private PlayWithTest $playWithTest;
     /**
      * @var PageFactory
      */
-    protected $resultPageFactory;
-    /**
-     * @var TestFactory
-     */
-    protected TestFactory $testFactory;
+    private PageFactory $resultPageFactory;
 
     /**
-     * Constructor
-     *
+     * Index constructor.
      * @param PageFactory $resultPageFactory
-     * @param TestFactory $testFactory
+     * @param PlayWithTest $playWithTest
      */
     public function __construct(
         PageFactory $resultPageFactory,
-        TestFactory $testFactory
+        PlayWithTest $playWithTest
     ) {
+        $this->playWithTest = $playWithTest;
         $this->resultPageFactory = $resultPageFactory;
-        $this->testFactory = $testFactory;
     }
 
     /**
@@ -40,9 +38,7 @@ class Index implements ActionInterface
      */
     public function execute()
     {
-        $testModelObj = $this->testFactory->create();
-
-        $testModelObj->log();
+        $this->playWithTest->run();
         die();
 
         //return $this->resultPageFactory->create();
