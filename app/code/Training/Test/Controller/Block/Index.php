@@ -4,7 +4,7 @@ namespace Training\Test\Controller\Block;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\View\LayoutFactory;
 
 /**
@@ -19,31 +19,33 @@ class Index implements HttpGetActionInterface, HttpPostActionInterface
     private $layoutFactory;
 
     /**
-     * @var ResponseInterface
+     * @var RawFactory
      */
-    private $response;
+    private RawFactory $resultRawFactory;
 
     /**
      * Index constructor.
      * @param LayoutFactory $layoutFactory
-     * @param ResponseInterface $response
+     * @param RawFactory $resultRawFactory
      */
     public function __construct(
         LayoutFactory $layoutFactory,
-        ResponseInterface $response
+        RawFactory $resultRawFactory
     ) {
         $this->layoutFactory = $layoutFactory;
-        $this->response = $response;
+        $this->resultRawFactory = $resultRawFactory;
     }
 
     /**
-     * @return ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $layout = $this->layoutFactory->create();
         $block = $layout->createBlock('Training\Test\Block\Test');
-        $this->response->appendBody($block->toHtml());
-        return $this->response;
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setHeader('Content-Type', 'text/html; charset=utf-8');
+        $resultRaw->setContents($block->toHtml());
+        return $resultRaw;
     }
 }
