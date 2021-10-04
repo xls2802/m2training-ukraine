@@ -72,10 +72,10 @@ class View extends \Magento\Catalog\Controller\Product\View
      */
     public function execute()
     {
-        if (!$this->customerSession->isLoggedIn()) {
-            $this->messageManager->addNoticeMessage(__('Viewing products is allowed only for logged in customers. Please log in.'));
-            return $this->redirectFactory->create()->setPath('customer/account/login');
-        }
+//        if (!$this->customerSession->isLoggedIn()) {
+//            $this->messageManager->addNoticeMessage(__('Viewing products is allowed only for logged in customers. Please log in.'));
+//            return $this->redirectFactory->create()->setPath('customer/account/login');
+//        }
         return parent::execute();
     }
 }
