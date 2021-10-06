@@ -13,5 +13,8 @@
         <route id="catalog" frontName="catalog">
             <module name="Training_Test" before="Magento_Catalog"/>
         </route>
+        <route id="training_render" frontName="training_render">
+            <module name="Training_Test"/>
+        </route>
     </router>
 </config>
