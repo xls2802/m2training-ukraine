@@ -1,0 +1,28 @@
+<?php
+    $url = $block->getUrl('js45/product/qty');
+    $product = $block->getProduct();
+?>
+
+<div data-bind="scope: 'avaliavleQty'">
+    <div id="current-product-id" data-product-id="<?=$product->getId()?>"></div>
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "avaliavleQty": {
+                    "component": "Training_Js45/js/avaliavle_qty",
+                    "config": {
+                        "template": "Training_Js45/avaliavle_qty",
+                        "url": "<?= $escaper->escapeJs($url) ?>"
+                    }
+                }
+            }
+        }
+    }
+}
+
+</script>
+
