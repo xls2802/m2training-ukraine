@@ -1,0 +1,25 @@
+<?php
+    $url = $block->getUrl('js44/review/index');
+?>
+
+<div class="ololo" data-bind="scope: 'customRandomReview'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "customRandomReview": {
+                    "component": "Training_Js44/js/review",
+                    "config": {
+                        "template": "Training_Js44/review",
+                        "url": "<?= $escaper->escapeJs($url) ?>"
+                    }
+                }
+            }
+        }
+    }
+}
+
+</script>
