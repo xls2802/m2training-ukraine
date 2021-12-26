@@ -10,7 +10,8 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 
 /**
- * Used for the firs enable/disable add to cart button before Ajax request (also used for receiving customer data info)
+ * Used for receiving customer data info and also could be used in a template if it is needed for public content
+ * see \Sg\CartStockThreshold\CustomerData\AddToCartThreshold
  * Class ViewModelCartStockThreshold
  * @package Sg\CartStockThreshold\ViewModel
  */
@@ -109,13 +110,5 @@ class ViewModelCartStockThreshold implements ArgumentInterface
     public function getCustomerGroupsForValidation()
     {
         return explode(',', $this->getConfig(self::CONFIG_PATH_CART_STOCK_THRESHOLD_CUSTOMER_GROUPS));
-    }
-
-    /**
-     * @return mixed
-     */
-    public function test()
-    {
-        return $this->getConfig(self::CONFIG_PATH_CART_STOCK_THRESHOLD_QTY);
     }
 }
