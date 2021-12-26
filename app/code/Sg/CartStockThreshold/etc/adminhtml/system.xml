@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="sales">
+            <group id="cart_stock_threshold" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1">
+                <label>Add To Cart Threshold</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="qty_threshold" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Product Qty Threshold</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
+                </field>
+                <field id="customer_groups" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Customer Groups</label>
+                    <source_model>Magento\Customer\Model\Customer\Source\Group</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
