@@ -5,8 +5,6 @@
  */
 
 /** @var $block \Magento\Catalog\Block\Product\View */
-/** @var $viewModelCartStockThreshold \Sg\CartStockThreshold\ViewModel\ViewModelCartStockThreshold */
-$viewModelCartStockThreshold = $block->getData('viewModelCartStockThreshold');
 ?>
 <?php $_product = $block->getProduct(); ?>
 <?php $buttonTitle = __('Add to Cart'); ?>
@@ -32,7 +30,7 @@ $viewModelCartStockThreshold = $block->getData('viewModelCartStockThreshold');
             <div class="actions" data-bind="scope: 'addtocartthreshold'">
                 <button type="submit"
                         title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
-                        class="action primary tocart <?= $viewModelCartStockThreshold->isAddToCartBtnEnabled($_product) ? '' : 'disabled'?>"
+                        class="action primary tocart"
                         id="product-addtocart-button" disabled
                         data-bind="attr: {class: 'action primary tocart ' + getEnabled().class }">
                     <span><?= $block->escapeHtml($buttonTitle) ?></span>

@@ -4,11 +4,6 @@
     <body>
         <referenceBlock name="product.info.addtocart"
                         template="Sg_CartStockThreshold::product/view/addtocart.phtml">
-            <arguments>
-                <argument name="viewModelCartStockThreshold" xsi:type="object">
-                    Sg\CartStockThreshold\ViewModel\ViewModelCartStockThreshold
-                </argument>
-            </arguments>
         </referenceBlock>
     </body>
 </page>

@@ -1,20 +1,24 @@
 <?php
+declare(strict_types=1);
+
 namespace Sg\CartStockThreshold\CustomerData;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Sg\CartStockThreshold\ViewModel\ViewModelCartStockThreshold;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Sg\CartStockThreshold\Model\CartStockThreshold;
 
 class AddToCartThreshold implements SectionSourceInterface
 {
     /**
-     * @var ViewModelCartStockThreshold
+     * @var CartStockThreshold
      */
-    private ViewModelCartStockThreshold $viewModelCartStockThreshold;
+    private CartStockThreshold $modelCartStockThreshold;
     /**
      * @var RedirectInterface
      */
@@ -34,20 +38,20 @@ class AddToCartThreshold implements SectionSourceInterface
 
     /**
      * AddToCartThreshold constructor.
-     * @param ViewModelCartStockThreshold $viewModelCartStockThreshold
+     * @param CartStockThreshold $modelCartStockThreshold
      * @param RedirectInterface $redirect
      * @param StoreManagerInterface $storeManager
      * @param UrlFinderInterface $urlFinder
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        ViewModelCartStockThreshold $viewModelCartStockThreshold,
+        CartStockThreshold $modelCartStockThreshold,
         RedirectInterface $redirect,
         StoreManagerInterface $storeManager,
         UrlFinderInterface $urlFinder,
         ProductRepositoryInterface $productRepository
     ) {
-        $this->viewModelCartStockThreshold = $viewModelCartStockThreshold;
+        $this->modelCartStockThreshold = $modelCartStockThreshold;
         $this->redirect = $redirect;
         $this->storeManager = $storeManager;
         $this->urlFinder = $urlFinder;
@@ -55,15 +59,16 @@ class AddToCartThreshold implements SectionSourceInterface
     }
 
     /**
-     * @return string[]
+     * @return array
+     * @throws NoSuchEntityException
      */
-    public function getSectionData()
+    public function getSectionData(): array
     {
         $class = '';
         $product = $this->getProductFromRefererUrl();
 
         if ($product) {
-            $isAddToCartBtnEnabled = $this->viewModelCartStockThreshold->isAddToCartBtnEnabled($product);
+            $isAddToCartBtnEnabled = $this->modelCartStockThreshold->isAddToCartBtnEnabled($product);
             if (!$isAddToCartBtnEnabled) {
                 $class = 'disabled';
             }
@@ -77,32 +82,36 @@ class AddToCartThreshold implements SectionSourceInterface
      * Used this approach because Magento\Catalog\Block\Product\View or registry or request
      * has no info about current product when Customer Data sections loaded
      *
-     * @return \Magento\Catalog\Api\Data\ProductInterface|null
+     * @return ProductInterface|null
      * @throws NoSuchEntityException
      */
-    public function getProductFromRefererUrl()
+    public function getProductFromRefererUrl(): ?ProductInterface
     {
         $product = null;
         $storeId = $this->storeManager->getStore()->getId();
         $domain = $this->storeManager->getStore()->getUrl();
         $refererUrl = $this->redirect->getRefererUrl();
-        $request_path = explode($domain, $refererUrl)[1];
+        $explodedPath = explode($domain, $refererUrl);
+        $requestPath = isset($explodedPath[1]) ? $explodedPath[1] : null;
+        $urlObj = null;
 
-        $data = [
-            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::REQUEST_PATH => $request_path,
-            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::STORE_ID => $storeId
-        ];
+        if ($requestPath) {
+            $data = [
+                UrlRewrite::REQUEST_PATH => $requestPath,
+                UrlRewrite::STORE_ID => $storeId
+            ];
+            $urlObj = $this->urlFinder->findOneByData($data);
+        }
 
-        $urlObj = $this->urlFinder->findOneByData($data);
-        if ($urlObj && $urlObj->getEntityType() == 'product') {
-            $origUrl = $urlObj->getTargetPath();
-            $productId = explode('/', $origUrl)[4];
+        if ($urlObj && $urlObj->getEntityType() === 'product') {
+            $productId = $urlObj->getEntityId();
             try {
                 $product = $this->productRepository->getById($productId);
             } catch (NoSuchEntityException $e) {
                 $product = null;
             }
         }
+
         return $product;
     }
 }

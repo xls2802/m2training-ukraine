@@ -1,21 +1,20 @@
 <?php
 
-namespace Sg\CartStockThreshold\ViewModel;
+namespace Sg\CartStockThreshold\Model;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
+//use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 
 /**
- * Used for receiving customer data info and also could be used in a template if it is needed for public content
- * see \Sg\CartStockThreshold\CustomerData\AddToCartThreshold
- * Class ViewModelCartStockThreshold
- * @package Sg\CartStockThreshold\ViewModel
+ * Used for receiving customer data in \Sg\CartStockThreshold\CustomerData\AddToCartThreshold
+ * Class CartStockThreshold
+ * @package Sg\CartStockThreshold\Model
  */
-class ViewModelCartStockThreshold implements ArgumentInterface
+class CartStockThreshold
 {
     const CONFIG_PATH_CART_STOCK_THRESHOLD_ENABLED = 'sales/cart_stock_threshold/enable';
     const CONFIG_PATH_CART_STOCK_THRESHOLD_QTY = 'sales/cart_stock_threshold/qty_threshold';
